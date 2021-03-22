@@ -10,6 +10,21 @@
 #include <QTableWidget>
 #include <QHeaderView>
 
+QLabel* logoLabel;
+QLabel* detailsLabel;
+QLineEdit* symLineEdit;
+
+
+void setDetails(QString symbol, QString details) {
+   QPixmap pic(symbol + ".png");
+   logoLabel->setPixmap(pic);
+   detailsLabel->setText(details);
+}
+
+void addStock() {
+  setDetails(symLineEdit->text(), "asdfasdfasdf\nasdfasdfasdf\nasdfafsdasdf\nasdfasdfaef");
+}
+
 int main(int argc, char *argv[])
 {
    QApplication app(argc, argv);
@@ -18,10 +33,11 @@ int main(int argc, char *argv[])
    QPushButton *addButton = new QPushButton("Add");
    QPushButton *deleteButton = new QPushButton("Delete");
 
-   QLineEdit *symLineEdit= new QLineEdit;
+   symLineEdit= new QLineEdit;
 
    QString msg = "These are the stock details. \nThere are lots of lines in here\nThese are the stock details. \nThere are lots of lines in here\nThese are the stock details. \nThere are lots of lines in here\nThese are the stock details. \nThere are lots of lines in here\nThese are the stock details. \nThere are lots of lines in here\n ";
-   QLabel detailsLabel(msg);
+
+   detailsLabel = new QLabel;
 
    QTableWidget *tv = new QTableWidget();
    tv->setRowCount(3);
@@ -32,12 +48,11 @@ int main(int argc, char *argv[])
    tv->verticalHeader()->hide();
    tv->setShowGrid(false);
 
-   QLabel logoLabel;
-   QPixmap pic("tesla.png");
-   logoLabel.setPixmap(pic);
-
+   logoLabel = new QLabel;
+   setDetails("TSLA", msg);
+   
    QTableWidgetItem* applIcon = new QTableWidgetItem();
-   applIcon->setIcon(QIcon("apple.png"));
+   applIcon->setIcon(QIcon("AAPL.png"));
    tv->setItem(0,0, applIcon);
 
    tv->setItem(0,1, new QTableWidgetItem("AAPL"));
@@ -46,7 +61,7 @@ int main(int argc, char *argv[])
    tv->setItem(0,4, new QTableWidgetItem("-5"));
 
    QTableWidgetItem* googleIcon = new QTableWidgetItem();
-   googleIcon->setIcon(QIcon("google.png"));
+   googleIcon->setIcon(QIcon("GOOG.png"));
 
    tv->setItem(1,0, googleIcon);
    tv->setItem(1,1, new QTableWidgetItem("GOOG"));
@@ -55,7 +70,7 @@ int main(int argc, char *argv[])
    tv->setItem(1,4, new QTableWidgetItem("-5"));
 
    QTableWidgetItem* teslaIcon = new QTableWidgetItem();
-   teslaIcon->setIcon(QIcon("tesla.png"));
+   teslaIcon->setIcon(QIcon("TSLA.png"));
    
    tv->setItem(2,0, teslaIcon);
    tv->setItem(2,1, new QTableWidgetItem("TSLA"));
@@ -68,9 +83,10 @@ int main(int argc, char *argv[])
    layout->addWidget(symLineEdit, 0, 1);
    layout->addWidget(deleteButton, 1, 0);
    layout->addWidget(tv, 2, 0, 2, 2);
-   layout->addWidget(&logoLabel, 4, 0);
-   layout->addWidget(&detailsLabel, 4, 1);
+   layout->addWidget(logoLabel, 4, 0);
+   layout->addWidget(detailsLabel, 4, 1);
 
+   QObject::connect(addButton, &QPushButton::clicked, addStock);
 
    window->resize(750, 500);
    window->setLayout(layout);

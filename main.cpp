@@ -37,6 +37,11 @@ void addStock()
 {
 }
 
+void deleteStock()
+{
+  stockList->removeRow(stockList->currentRow());
+}
+
 int main(int argc, char *argv[])
 {
    QApplication app(argc, argv);
@@ -99,6 +104,7 @@ int main(int argc, char *argv[])
    layout->addWidget(detailsLabel, 4, 1);
 
    QObject::connect(addButton, &QPushButton::clicked, addStock);
+   QObject::connect(deleteButton, &QPushButton::clicked, deleteStock);
    QObject::connect(stockList, &QTableWidget::itemSelectionChanged, updateDetails);
 
    window->resize(750, 500);

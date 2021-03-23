@@ -17,9 +17,23 @@ const int NAME_COLUMN = 2;
 const int PRICE_COLUMN = 3;
 const int DIFF_COLUMN = 4;
 
-void TickerWindow::getStockInfo(QString sym)
+StockInfo TickerWindow::getStockInfo(QString sym)
 {
-  m_stockDetails[sym] = "This is data for " + sym;
+  StockInfo info;
+  info.logoFilename = sym + ".png";
+  info.symbol = sym;
+  info.name = "Name";
+  info.price = "Price";
+  info.diff = "Diff";
+  info.desc = "Desc";
+  info.open = "Open";
+  info.high = "High";
+  info.low = "Low";
+  info.close = "Close";
+  info.volume = "Volume";
+  
+  m_stockDetails[sym] = info;
+  return info;
 }
 
 TickerWindow::TickerWindow(int width, int height) 
@@ -104,9 +118,10 @@ void TickerWindow::setDetails(QString symbol)
 	  return;
 	}
 
-  QPixmap pic(symbol + ".png");
+  StockInfo info = m_stockDetails[symbol];
+  QPixmap pic(info.logoFilename);
   m_logoLabel->setPixmap(pic);
-  m_detailsLabel->setText(m_stockDetails[symbol]);
+  m_detailsLabel->setText("Title: " + info.symbol + "\nSubtitle: " + info.name + "\nDesc: " + info.desc + "\nOpen: " + info.open + "\nHigh: " + info.high + "\nLow: "+ info.low + "\nClose: " + info.close + "\nVolume: " + info.volume);
 }
 
 void TickerWindow::updateDetails()
@@ -147,8 +162,8 @@ void TickerWindow::addStockFromSymbol(QString sym)
   int numRows = m_stockTableWidget->rowCount();
   m_stockTableWidget->setRowCount(numRows + 1);
 
-  getStockInfo(sym);
-  initStockListRow(numRows, sym, "Searching...", "Searching...", "Searching...");
+  StockInfo info = getStockInfo(sym);
+  initStockListRow(numRows, info.symbol, info.name, info.price, info.diff);
 }
 
 void TickerWindow::addStock()

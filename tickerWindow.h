@@ -11,6 +11,21 @@ class QPushButton;
 
 using namespace std;
 
+struct StockInfo {
+  QString logoFilename;
+  QString symbol;
+  QString name;
+  QString price;
+  QString diff;
+  QString desc;
+  QString open;
+  QString high;
+  QString low;
+  QString close;
+  QString volume;
+};
+
+
 class TickerWindow : public QWidget
 {
 private:
@@ -21,7 +36,7 @@ private:
   QGridLayout* m_gridLayout;
   QPushButton* m_addButton;
   QPushButton* m_deleteButton;
-  map<QString, QString> m_stockDetails;
+  map<QString, StockInfo> m_stockDetails;
   
 public:
   TickerWindow(int width, int height);
@@ -33,7 +48,7 @@ public:
   void initStockListRow(int row, QString sym, QString name, QString price, QString diff);
   void addStock();
   void addStockFromSymbol(QString sym);
-  void getStockInfo(QString sym);
+  StockInfo getStockInfo(QString sym);
 };
 
 #endif //TICKER_WINDOW_H

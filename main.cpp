@@ -20,6 +20,13 @@ QPushButton* deleteButton;
 // TODO: check that TableWidgetItems get deleted
 // TODO: put this all in a class, so clean can be in a destructor
 // TODO: make sure to not delete things twice (currently I am seg faulting)
+// TODO: should I use const or const_expr
+
+const int ICON_COLUMN = 0;
+const int SYMBOL_COLUMN = 1;
+const int NAME_COLUMN = 2;
+const int PRICE_COLUMN = 3;
+const int DIFF_COLUMN = 4;
 
 void setDetails(QString symbol)
 {
@@ -46,7 +53,7 @@ void updateDetails()
 	  return;
   }
   
-  QTableWidgetItem* currItem = stockList->item(curr, 1);
+  QTableWidgetItem* currItem = stockList->item(curr, SYMBOL_COLUMN);
   setDetails(currItem->text());
 }
 
@@ -61,17 +68,20 @@ void initStockListRow(int row, QString sym, QString name, QString price, QString
   QTableWidgetItem* icon = new QTableWidgetItem();
   icon->setIcon(QIcon(sym + ".png"));
 
-  stockList->setItem(row, 0, icon);
-  stockList->setItem(row, 1, new QTableWidgetItem(sym));
-  stockList->setItem(row, 2, new QTableWidgetItem(name));
-  stockList->setItem(row, 3, new QTableWidgetItem(price));
-  stockList->setItem(row, 4, new QTableWidgetItem(diff));
+  stockList->setItem(row, ICON_COLUMN, icon);
+  stockList->setItem(row, SYMBOL_COLUMN, new QTableWidgetItem(sym));
+  stockList->setItem(row, NAME_COLUMN, new QTableWidgetItem(name));
+  stockList->setItem(row, PRICE_COLUMN, new QTableWidgetItem(price));
+  stockList->setItem(row, DIFF_COLUMN, new QTableWidgetItem(diff));
 }
 
 void addStock()
 {
   int numRows = stockList->rowCount();
   stockList->setRowCount(numRows + 1);
+
+  // TODO: call api to get this information
+  
   initStockListRow(numRows, symLineEdit->text(), "Searching...", "Searching...", "Searching...");
 }
 
@@ -89,12 +99,6 @@ void cleanup()
   if(stockList)
 	delete stockList;
 
-  if(window)
-	delete window;
-  
-  if(layout)
-	delete layout;
-
   if(addButton)
 	delete layout;
 
@@ -102,7 +106,7 @@ void cleanup()
 	delete deleteButton;
 }
 
-void init()
+void allocWidgets()
 {
   window = new QWidget;
   symLineEdit= new QLineEdit;
@@ -114,10 +118,13 @@ void init()
   deleteButton = new QPushButton("Delete");
 }
 
+void doLayout() {
+}
+
 int main(int argc, char *argv[])
 {
    QApplication app(argc, argv);
-   init();
+   allocWidgets();
 
    stockList->setRowCount(3);
    stockList->setColumnCount(5);

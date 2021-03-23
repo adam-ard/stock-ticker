@@ -12,15 +12,28 @@ QLabel* logoLabel;
 QLabel* detailsLabel;
 QLineEdit* symLineEdit;
 QTableWidget* stockList;
+QWidget* window;
+QGridLayout* layout;
+QPushButton* addButton;
+QPushButton* deleteButton;
 
+// TODO: check that TableWidgetItems get deleted
+// TODO: put this all in a class, so clean can be in a destructor
+// TODO: make sure to not delete things twice (currently I am seg faulting)
 
-// TODO: make sure memory is cleaned up
-
-void setDetails(QString symbol, QString details)
+void setDetails(QString symbol)
 {
-   QPixmap pic(symbol + ".png");
-   logoLabel->setPixmap(pic);
-   detailsLabel->setText(details);
+  if(symbol == "")
+  {
+	logoLabel->clear();
+	detailsLabel->setText("Nothing is selected");
+	return;
+  }
+
+  // TODO: call the API to get this information
+  QPixmap pic(symbol + ".png");
+  logoLabel->setPixmap(pic);
+  detailsLabel->setText("Here is some fake data\nWe'll add some more stuff later\nStay tuned\nIt'll be fun");
 }
 
 void updateDetails()
@@ -29,12 +42,12 @@ void updateDetails()
 
   if(curr == -1)
   {
-	  setDetails("", "No stocks to load");
+	  setDetails("");
 	  return;
   }
   
   QTableWidgetItem* currItem = stockList->item(curr, 1);
-  setDetails(currItem->text(), "asdfasdfasdf\nasdfasdfasdf\nasdfafsdasdf\nasdfasdfaef");
+  setDetails(currItem->text());
 }
 
 void deleteStock()
@@ -62,21 +75,50 @@ void addStock()
   initStockListRow(numRows, symLineEdit->text(), "Searching...", "Searching...", "Searching...");
 }
 
+void cleanup()
+{
+  if(logoLabel)
+	delete logoLabel;
+
+  if(detailsLabel)
+	delete detailsLabel;
+
+  if(symLineEdit)
+	delete symLineEdit;
+
+  if(stockList)
+	delete stockList;
+
+  if(window)
+	delete window;
+  
+  if(layout)
+	delete layout;
+
+  if(addButton)
+	delete layout;
+
+  if(deleteButton)
+	delete deleteButton;
+}
+
+void init()
+{
+  window = new QWidget;
+  symLineEdit= new QLineEdit;
+  detailsLabel = new QLabel;
+  stockList = new QTableWidget;
+  logoLabel = new QLabel;
+  layout = new QGridLayout;
+  addButton = new QPushButton("Add");
+  deleteButton = new QPushButton("Delete");
+}
+
 int main(int argc, char *argv[])
 {
    QApplication app(argc, argv);
-   QWidget *window = new QWidget;
-   
-   QPushButton *addButton = new QPushButton("Add");
-   QPushButton *deleteButton = new QPushButton("Delete");
+   init();
 
-   symLineEdit= new QLineEdit;
-
-   QString msg = "These are the stock details. \nThere are lots of lines in here\nThese are the stock details. \nThere are lots of lines in here\nThese are the stock details. \nThere are lots of lines in here\nThese are the stock details. \nThere are lots of lines in here\nThese are the stock details. \nThere are lots of lines in here\n ";
-
-   detailsLabel = new QLabel;
-
-   stockList = new QTableWidget();
    stockList->setRowCount(3);
    stockList->setColumnCount(5);
    stockList->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -85,13 +127,10 @@ int main(int argc, char *argv[])
    stockList->verticalHeader()->hide();
    stockList->setShowGrid(false);
 
-   logoLabel = new QLabel;
-
    initStockListRow(0, "AAPL", "Apple", "100", "-50");
    initStockListRow(1, "GOOG", "Google", "200", "-40");
    initStockListRow(2, "TSLA", "Tesla", "250", "-70");
    
-   QGridLayout *layout = new QGridLayout;
    layout->addWidget(addButton, 0, 0);
    layout->addWidget(symLineEdit, 0, 1);
    layout->addWidget(deleteButton, 1, 0);
@@ -108,5 +147,9 @@ int main(int argc, char *argv[])
    window->resize(750, 500);
    window->setLayout(layout);
    window->show();
-   return app.exec();
+   int res = app.exec();
+
+   cleanup();
+
+   return res;
 }

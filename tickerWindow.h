@@ -9,6 +9,8 @@ class QTableWidget;
 class QGridLayout;
 class QPushButton;
 
+using namespace std;
+
 class TickerWindow : public QWidget
 {
 private:
@@ -19,6 +21,7 @@ private:
   QGridLayout* m_gridLayout;
   QPushButton* m_addButton;
   QPushButton* m_deleteButton;
+  map<QString, QString> m_stockDetails;
   
 public:
   TickerWindow(int width, int height);

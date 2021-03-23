@@ -8,9 +8,8 @@
 
 #include "tickerWindow.h"
 
-#include <curlpp/cURLpp.hpp>
-
-// TODO: should I use const or const_expr
+// TODO: should I use const or const_expr?
+// TODO: should I use string instead of QString?
 
 const int ICON_COLUMN = 0;
 const int SYMBOL_COLUMN = 1;
@@ -20,7 +19,7 @@ const int DIFF_COLUMN = 4;
 
 void TickerWindow::getStockInfo(QString sym)
 {
-  std::cout << "Retreiving data for " << sym.toUtf8().constData() << std::endl;
+  m_stockDetails[sym] = "This is data for " + sym;
 }
 
 TickerWindow::TickerWindow(int width, int height) 
@@ -63,7 +62,7 @@ TickerWindow::~TickerWindow()
 void TickerWindow::doLayout()
 {
   // setup the table widget
-  m_stockTableWidget->setRowCount(3);
+  m_stockTableWidget->setRowCount(0);
   m_stockTableWidget->setColumnCount(5);
   m_stockTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
   m_stockTableWidget->horizontalHeader()->hide();
@@ -72,9 +71,9 @@ void TickerWindow::doLayout()
   m_stockTableWidget->setShowGrid(false);
 
   // put in the fake data
-  initStockListRow(0, "AAPL", "Apple", "100", "-50");
-  initStockListRow(1, "GOOG", "Google", "200", "-40");
-  initStockListRow(2, "TSLA", "Tesla", "250", "-70");
+  addStockFromSymbol("AAPL");
+  addStockFromSymbol("GOOG");
+  addStockFromSymbol("TSLA");
 
   // add everything to the gird layout
   m_gridLayout->addWidget(m_addButton, 0, 0);
@@ -105,10 +104,9 @@ void TickerWindow::setDetails(QString symbol)
 	  return;
 	}
 
-  // TODO: call the API to get this information
   QPixmap pic(symbol + ".png");
   m_logoLabel->setPixmap(pic);
-  m_detailsLabel->setText("Here is some fake data\nWe'll add some more stuff later\nStay tuned\nIt'll be fun");
+  m_detailsLabel->setText(m_stockDetails[symbol]);
 }
 
 void TickerWindow::updateDetails()

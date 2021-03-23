@@ -2,15 +2,10 @@
 #include <QPushButton>
 #include <QGridLayout>
 #include <QLineEdit>
-#include <QDateTimeEdit>
-#include <QComboBox>
-#include <QPushButton>
-#include <QStringList>
 #include <QLabel>
 #include <QTableWidget>
 #include <QHeaderView>
 
-#include <cstdio>
 #include <iostream>
 
 QLabel* logoLabel;

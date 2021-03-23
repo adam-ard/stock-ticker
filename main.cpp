@@ -11,6 +11,7 @@
 #include <QHeaderView>
 
 #include <cstdio>
+#include <iostream>
 
 QLabel* logoLabel;
 QLabel* detailsLabel;
@@ -28,18 +29,36 @@ void setDetails(QString symbol, QString details)
 void updateDetails()
 {
   int curr = stockList->currentRow();
-  QTableWidgetItem* currItem = stockList->item(curr, 1);
 
+  if(curr == -1)
+  {
+	  setDetails("", "No stocks to load");
+	  return;
+  }
+  
+  QTableWidgetItem* currItem = stockList->item(curr, 1);
   setDetails(currItem->text(), "asdfasdfasdf\nasdfasdfasdf\nasdfafsdasdf\nasdfasdfaef");
 }
 
 void addStock()
 {
+  int numRows = stockList->rowCount();
+  stockList->setRowCount(numRows + 1);
+  
+  QTableWidgetItem* icon = new QTableWidgetItem();
+  icon->setIcon(QIcon(symLineEdit->text() + ".png"));
+
+  stockList->setItem(numRows,0, icon);
+  stockList->setItem(numRows,1, new QTableWidgetItem(symLineEdit->text()));
+  stockList->setItem(numRows,2, new QTableWidgetItem("Searching"));
+  stockList->setItem(numRows,3, new QTableWidgetItem("????"));
+  stockList->setItem(numRows,4, new QTableWidgetItem("????"));
 }
 
 void deleteStock()
 {
   stockList->removeRow(stockList->currentRow());
+  stockList->setCurrentCell(0,0);
 }
 
 int main(int argc, char *argv[])
@@ -66,7 +85,6 @@ int main(int argc, char *argv[])
    stockList->setShowGrid(false);
 
    logoLabel = new QLabel;
-   setDetails("TSLA", msg);
    
    QTableWidgetItem* applIcon = new QTableWidgetItem();
    applIcon->setIcon(QIcon("AAPL.png"));
@@ -95,6 +113,7 @@ int main(int argc, char *argv[])
    stockList->setItem(2,3, new QTableWidgetItem("-100"));
    stockList->setItem(2,4, new QTableWidgetItem("-5"));
 
+   
    QGridLayout *layout = new QGridLayout;
    layout->addWidget(addButton, 0, 0);
    layout->addWidget(symLineEdit, 0, 1);
@@ -107,6 +126,9 @@ int main(int argc, char *argv[])
    QObject::connect(deleteButton, &QPushButton::clicked, deleteStock);
    QObject::connect(stockList, &QTableWidget::itemSelectionChanged, updateDetails);
 
+   stockList->setCurrentCell(0,0);
+
+   
    window->resize(750, 500);
    window->setLayout(layout);
    window->show();

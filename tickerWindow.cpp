@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "tickerWindow.h"
+#include "stockInfo.h"
 
 // TODO: should I use const or const_expr?
 // TODO: should I use string instead of QString?
@@ -19,18 +20,11 @@ const int DIFF_COLUMN = 4;
 
 StockInfo TickerWindow::getStockInfo(QString sym)
 {
-  StockInfo info;
-  info.logoFilename = sym + ".png";
-  info.symbol = sym;
-  info.name = "Name";
-  info.price = "Price";
-  info.diff = "Diff";
-  info.desc = "Desc";
-  info.open = "Open";
-  info.high = "High";
-  info.low = "Low";
-  info.close = "Close";
-  info.volume = "Volume";
+  if(m_stockDetails.find(sym) != m_stockDetails.end())
+	return m_stockDetails[sym];
+  
+  StockInfo info(sym);
+  info.load();
   
   m_stockDetails[sym] = info;
   return info;
@@ -119,9 +113,9 @@ void TickerWindow::setDetails(QString symbol)
 	}
 
   StockInfo info = m_stockDetails[symbol];
-  QPixmap pic(info.logoFilename);
+  QPixmap pic(info.logoFilename());
   m_logoLabel->setPixmap(pic);
-  m_detailsLabel->setText("Title: " + info.symbol + "\nSubtitle: " + info.name + "\nDesc: " + info.desc + "\nOpen: " + info.open + "\nHigh: " + info.high + "\nLow: "+ info.low + "\nClose: " + info.close + "\nVolume: " + info.volume);
+  m_detailsLabel->setText(info.stockDesc());
 }
 
 void TickerWindow::updateDetails()
@@ -163,7 +157,7 @@ void TickerWindow::addStockFromSymbol(QString sym)
   m_stockTableWidget->setRowCount(numRows + 1);
 
   StockInfo info = getStockInfo(sym);
-  initStockListRow(numRows, info.symbol, info.name, info.price, info.diff);
+  initStockListRow(numRows, info.symbol(), info.name(), info.price(), info.diff());
 }
 
 void TickerWindow::addStock()

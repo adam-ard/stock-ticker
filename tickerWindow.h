@@ -8,23 +8,9 @@ class QLineEdit;
 class QTableWidget;
 class QGridLayout;
 class QPushButton;
+class StockInfo;
 
 using namespace std;
-
-struct StockInfo {
-  QString logoFilename;
-  QString symbol;
-  QString name;
-  QString price;
-  QString diff;
-  QString desc;
-  QString open;
-  QString high;
-  QString low;
-  QString close;
-  QString volume;
-};
-
 
 class TickerWindow : public QWidget
 {

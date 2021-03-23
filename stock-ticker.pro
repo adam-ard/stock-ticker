@@ -20,7 +20,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 # Input
 SOURCES += main.cpp \
-           tickerWindow.cpp
+           tickerWindow.cpp \
+           stockInfo.cpp
 
-HEADERS += tickerWindow.h
+HEADERS += tickerWindow.h \
+           stockInfo.h               
 

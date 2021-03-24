@@ -78,6 +78,7 @@ void TickerWindow::doLayout()
   m_stockTableWidget->horizontalHeader()->setStretchLastSection(true);
   m_stockTableWidget->verticalHeader()->hide();
   m_stockTableWidget->setShowGrid(false);
+  m_stockTableWidget->sortItems(1);
 
   // put in the fake data
   addStockFromSymbol("AAPL");
@@ -166,6 +167,7 @@ void TickerWindow::addStockFromSymbol(QString sym)
 void TickerWindow::addStock()
 {
   addStockFromSymbol(m_symLineEdit->text());
+  m_stockTableWidget->sortItems(1);
 }
 
 

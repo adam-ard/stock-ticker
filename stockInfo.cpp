@@ -4,19 +4,33 @@
 #include <QJsonObject>
 
 #include <iostream>
-
 #include "stockInfo.h"
 
+
+QString StockInfo::httpGetPolygon(const string path, int& out_exitStatus)
+{
+  string polygonPath = "https://api.polygon.io/" + path + "?apiKey=" + API_KEY;
+  return httpGet(polygonPath, out_exitStatus);
+}
+
+QString StockInfo::httpGet(const string path, int& out_exitStatus)
+{
+  return shellCmd("curl " + path, out_exitStatus);
+}
+
+QString StockInfo::downloadLogo(const string url, int& out_exitStatus)
+{
+  string cmd = "curl " + url + "?apiKey=" + API_KEY + " --output " + m_symbol.toUtf8().constData() + ".png";
+  return shellCmd(cmd, out_exitStatus);
+}
 
 /*
   This snippet comes from https://dev.to/aggsol/calling-shell-commands-from-c-8ej
 */
-QString StockInfo::httpGet(const string path, int& out_exitStatus)
+QString StockInfo::shellCmd(const string cmd, int& out_exitStatus)
 {
-  string getCmd = "curl https://api.polygon.io/" + path + "?apiKey=" + API_KEY;
-  
   out_exitStatus = 0;
-  auto pPipe = ::popen(getCmd.c_str(), "r");
+  auto pPipe = ::popen(cmd.c_str(), "r");
   if(pPipe == nullptr)
     {
 	  throw runtime_error("Cannot open pipe");
@@ -58,17 +72,22 @@ void StockInfo::load()
   m_logoFilename = m_symbol + ".png";
 
   int status = 0;
-  QString symbolDetails = httpGet(("v1/meta/symbols/" + m_symbol + "/company").toUtf8().constData(), status);
+  QString symbolDetails = httpGetPolygon(("v1/meta/symbols/" + m_symbol + "/company").toUtf8().constData(), status);
 
-  // TODO: download the logos
+  // TODO: handle errors
   QJsonDocument d = QJsonDocument::fromJson(symbolDetails.toUtf8().constData());
   QJsonObject sett2 = d.object();
 
   m_name = sett2["name"].toString();
   m_desc = sett2["description"].toString();
 
+  QString logoUrl = sett2["logo"].toString();
+
+  downloadLogo(logoUrl.toUtf8().constData(), status);
+
   // TODO: get yesterday's date, and the day before
-  QString openClose = httpGet(("v1/open-close/" + m_symbol + "/2021-03-22").toUtf8().constData(), status);
+  // TODO: problem with too many requests
+  QString openClose = httpGetPolygon(("v1/open-close/" + m_symbol + "/2021-03-22").toUtf8().constData(), status);
   
   QJsonDocument d1 = QJsonDocument::fromJson(openClose.toUtf8().constData());
   QJsonObject sett3 = d1.object();
@@ -80,7 +99,7 @@ void StockInfo::load()
   m_close = QString::number(sett3["close"].toDouble());
   m_volume = QString::number(sett3["volume"].toDouble());
 
-  QString openClosePrev = httpGet(("v2/aggs/ticker/" + m_symbol + "/prev").toUtf8().constData(), status);
+  QString openClosePrev = httpGetPolygon(("v2/aggs/ticker/" + m_symbol + "/prev").toUtf8().constData(), status);
 
   QJsonDocument d3 = QJsonDocument::fromJson(openClosePrev.toUtf8().constData());
   QJsonObject sett4 = d3.object();

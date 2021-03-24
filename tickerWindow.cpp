@@ -82,8 +82,8 @@ void TickerWindow::doLayout()
 
   // put in the fake data
   addStockFromSymbol("AAPL");
-  addStockFromSymbol("GOOG");
-  addStockFromSymbol("TSLA");
+  //  addStockFromSymbol("GOOG");
+  //  addStockFromSymbol("TSLA");
 
   // add everything to the gird layout
   m_gridLayout->addWidget(m_addButton, 0, 0);

@@ -67,26 +67,28 @@ void StockInfo::load()
   m_name = sett2["name"].toString();
   m_desc = sett2["description"].toString();
 
-  // TODO: get yesterday's date
+  // TODO: get yesterday's date, and the day before
   QString openClose = httpGet(("v1/open-close/" + m_symbol + "/2021-03-22").toUtf8().constData(), status);
   
   QJsonDocument d1 = QJsonDocument::fromJson(openClose.toUtf8().constData());
   QJsonObject sett3 = d1.object();
   
   m_open = QString::number(sett3["open"].toDouble());
+  m_price = QString::number(sett3["close"].toDouble());
   m_high = QString::number(sett3["high"].toDouble());
   m_low = QString::number(sett3["low"].toDouble());
   m_close = QString::number(sett3["close"].toDouble());
   m_volume = QString::number(sett3["volume"].toDouble());
 
-  QString openClosePrev = httpGet(("v1/open-close/" + m_symbol + "/2021-03-21").toUtf8().constData(), status);
+  QString openClosePrev = httpGet(("v2/aggs/ticker/" + m_symbol + "/prev").toUtf8().constData(), status);
   cout << openClosePrev.toUtf8().constData() << endl;
 
   QJsonDocument d3 = QJsonDocument::fromJson(openClosePrev.toUtf8().constData());
   QJsonObject sett4 = d3.object();
-  
-  m_price = QString::number(sett3["close"].toDouble());
-  m_diff = QString::number(sett4["close"].toDouble() - sett3["close"].toDouble());
+
+  // I am taking the closing values, since the last trade and snapshot seem to be not authorized
+  QJsonObject results = sett4["results"].toObject();
+  m_diff = QString::number(results["c"].toDouble() - sett3["close"].toDouble());
 }
 
 QString StockInfo::logoFilename()

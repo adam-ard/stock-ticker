@@ -69,7 +69,6 @@ void StockInfo::load()
 
   // TODO: get yesterday's date
   QString openClose = httpGet(("v1/open-close/" + m_symbol + "/2021-03-22").toUtf8().constData(), status);
-  cout << openClose.toUtf8().constData() << endl;
   
   QJsonDocument d1 = QJsonDocument::fromJson(openClose.toUtf8().constData());
   QJsonObject sett3 = d1.object();
@@ -79,9 +78,15 @@ void StockInfo::load()
   m_low = QString::number(sett3["low"].toDouble());
   m_close = QString::number(sett3["close"].toDouble());
   m_volume = QString::number(sett3["volume"].toDouble());
+
+  QString openClosePrev = httpGet(("v1/open-close/" + m_symbol + "/2021-03-21").toUtf8().constData(), status);
+  cout << openClosePrev.toUtf8().constData() << endl;
+
+  QJsonDocument d3 = QJsonDocument::fromJson(openClosePrev.toUtf8().constData());
+  QJsonObject sett4 = d3.object();
   
-  m_price = "Price";
-  m_diff = "Diff";
+  m_price = QString::number(sett3["close"].toDouble());
+  m_diff = QString::number(sett4["close"].toDouble() - sett3["close"].toDouble());
 }
 
 QString StockInfo::logoFilename()

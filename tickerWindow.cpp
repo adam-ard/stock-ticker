@@ -4,13 +4,13 @@
 #include <QLabel>
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QNetworkAccessManager>
 #include <iostream>
 
 #include "tickerWindow.h"
 #include "stockInfo.h"
 
 // TODO: should I use const or const_expr?
-// TODO: should I use string instead of QString?
 
 const int ICON_COLUMN = 0;
 const int SYMBOL_COLUMN = 1;
@@ -23,7 +23,7 @@ StockInfo TickerWindow::getStockInfo(QString sym)
   if(m_stockDetails.find(sym) != m_stockDetails.end())
 	return m_stockDetails[sym];
   
-  StockInfo info(sym);
+  StockInfo info(sym, m_networkManager);
   info.load();
   
   m_stockDetails[sym] = info;
@@ -39,6 +39,7 @@ TickerWindow::TickerWindow(int width, int height)
   m_gridLayout = new QGridLayout;
   m_addButton = new QPushButton("Add");
   m_deleteButton = new QPushButton("Delete");
+  m_networkManager = new QNetworkAccessManager(this);
 
   doLayout();
 

@@ -9,6 +9,7 @@ class QTableWidget;
 class QGridLayout;
 class QPushButton;
 class StockInfo;
+class QNetworkAccessManager;
 
 using namespace std;
 
@@ -22,6 +23,7 @@ private:
   QGridLayout* m_gridLayout;
   QPushButton* m_addButton;
   QPushButton* m_deleteButton;
+  QNetworkAccessManager* m_networkManager;
   map<QString, StockInfo> m_stockDetails;
   
 public:

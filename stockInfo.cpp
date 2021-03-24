@@ -45,6 +45,7 @@ QString StockInfo::shellCmd(const string cmd)
 StockInfo::StockInfo(QString sym, QNetworkAccessManager* networkManager) : m_symbol(sym)
 {
   m_networkManager = networkManager;
+  m_logoFilename = m_symbol + ".png";
 }
 
 StockInfo::StockInfo()
@@ -53,19 +54,17 @@ StockInfo::StockInfo()
 
 void StockInfo::load()
 {
-  m_logoFilename = m_symbol + ".png";
-
   // Details
   QString symbolDetails = httpGetPolygon(("v1/meta/symbols/" +
 										  m_symbol +
 										  "/company").toUtf8().constData());
 
-  QJsonDocument d = QJsonDocument::fromJson(symbolDetails.toUtf8().constData());
-  QJsonObject sett2 = d.object();
+  QJsonDocument document = QJsonDocument::fromJson(symbolDetails.toUtf8().constData());
+  QJsonObject root = document.object();
 
-  m_name = sett2["name"].toString();
-  m_desc = sett2["description"].toString();
-  QString logoUrl = sett2["logo"].toString();
+  m_name = root["name"].toString();
+  m_desc = root["description"].toString();
+  QString logoUrl = root["logo"].toString();
 
   downloadFilePolygon(logoUrl.toUtf8().constData());
 
@@ -74,9 +73,9 @@ void StockInfo::load()
 										  m_symbol +
 										  "/prev").toUtf8().constData());
 
-  QJsonDocument d3 = QJsonDocument::fromJson(openClosePrev.toUtf8().constData());
-  QJsonObject sett4 = d3.object();
-  QJsonValue value = sett4.value(QString("results"));
+  QJsonDocument document2 = QJsonDocument::fromJson(openClosePrev.toUtf8().constData());
+  QJsonObject root2 = document2.object();
+  QJsonValue value = root2.value(QString("results"));
 
   QJsonObject item = value[0].toObject();
 

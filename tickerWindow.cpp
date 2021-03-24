@@ -79,7 +79,7 @@ void TickerWindow::doLayout()
   m_stockTableWidget->sortItems(1);
 
   // I can only seed two values before the rate limiting kicks in for the api
-  //    that is why Google is commented out.
+  //    that is why Tesla is commented out.
   addStockFromSymbol("AAPL");
   addStockFromSymbol("GOOG");
   //  addStockFromSymbol("TSLA");

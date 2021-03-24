@@ -92,6 +92,8 @@ void TickerWindow::doLayout()
   m_gridLayout->addWidget(m_logoLabel, 4, 0);
   m_gridLayout->addWidget(m_detailsLabel, 4, 1);
 
+  m_detailsLabel->setWordWrap(true);
+  
   // connect the signals and slots
   QObject::connect(m_addButton, &QPushButton::clicked, this, &TickerWindow::addStock);
   QObject::connect(m_deleteButton, &QPushButton::clicked, this, &TickerWindow::deleteStock);

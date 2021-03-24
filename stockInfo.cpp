@@ -58,21 +58,30 @@ void StockInfo::load()
   m_logoFilename = m_symbol + ".png";
 
   int status = 0;
-
   QString symbolDetails = httpGet(("v1/meta/symbols/" + m_symbol + "/company").toUtf8().constData(), status);
-  
+
+  // TODO: download the logos
   QJsonDocument d = QJsonDocument::fromJson(symbolDetails.toUtf8().constData());
   QJsonObject sett2 = d.object();
 
   m_name = sett2["name"].toString();
+  m_desc = sett2["description"].toString();
+
+  // TODO: get yesterday's date
+  QString openClose = httpGet(("v1/open-close/" + m_symbol + "/2021-03-22").toUtf8().constData(), status);
+  cout << openClose.toUtf8().constData() << endl;
+  
+  QJsonDocument d1 = QJsonDocument::fromJson(openClose.toUtf8().constData());
+  QJsonObject sett3 = d1.object();
+  
+  m_open = QString::number(sett3["open"].toDouble());
+  m_high = QString::number(sett3["high"].toDouble());
+  m_low = QString::number(sett3["low"].toDouble());
+  m_close = QString::number(sett3["close"].toDouble());
+  m_volume = QString::number(sett3["volume"].toDouble());
+  
   m_price = "Price";
   m_diff = "Diff";
-  m_desc = sett2["description"].toString();
-  m_open = "Open";
-  m_high = "High";
-  m_low = "Low";
-  m_close = "Close";
-  m_volume = "Volume";
 }
 
 QString StockInfo::logoFilename()

@@ -87,11 +87,13 @@ void TickerWindow::doLayout()
 
   // add everything to the gird layout
   m_gridLayout->addWidget(m_addButton, 0, 0);
-  m_gridLayout->addWidget(m_symLineEdit, 0, 1);
+  m_gridLayout->addWidget(m_symLineEdit, 0, 1, 1, 1);
   m_gridLayout->addWidget(m_deleteButton, 1, 0);
-  m_gridLayout->addWidget(m_stockTableWidget, 2, 0, 2, 2);
-  m_gridLayout->addWidget(m_logoLabel, 4, 0);
-  m_gridLayout->addWidget(m_detailsLabel, 4, 1);
+  m_gridLayout->addWidget(m_stockTableWidget, 2, 0, 2, 3);
+  m_gridLayout->addWidget(m_logoLabel, 4, 0, 1, 2);
+  m_gridLayout->addWidget(m_detailsLabel, 4, 2);
+
+  
 
   m_detailsLabel->setWordWrap(true);
   

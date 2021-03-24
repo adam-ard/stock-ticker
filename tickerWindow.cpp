@@ -10,8 +10,6 @@
 #include "tickerWindow.h"
 #include "stockInfo.h"
 
-// TODO: should I use const or const_expr?
-
 const int ICON_COLUMN = 0;
 const int SYMBOL_COLUMN = 1;
 const int NAME_COLUMN = 2;

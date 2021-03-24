@@ -22,6 +22,12 @@ private:
   QString m_volume;
   QNetworkAccessManager* m_networkManager;
 
+  // helpers
+  QString httpGetPolygon(const string path);
+  QString downloadFilePolygon(const string url);
+  QString httpGet(const string path);
+  QString shellCmd(const string cmd);
+
 public:
   StockInfo();
   StockInfo(QString sym, QNetworkAccessManager* networkManager);
@@ -33,11 +39,6 @@ public:
   QString name();
   QString price();
   QString diff();
-
-  QString httpGetPolygon(const string path, int& out_exitStatus);
-  QString httpGet(const string path, int& out_exitStatus);
-  QString downloadLogo(const string url, int& out_exitStatus);
-  QString shellCmd(const string cmd, int& out_exitStatus);
 };
 
 #endif //STOCK_INFO_H

@@ -80,9 +80,10 @@ void TickerWindow::doLayout()
   m_stockTableWidget->setShowGrid(false);
   m_stockTableWidget->sortItems(1);
 
-  // put in the fake data
+  // I can only seed two values before the rate limiting kicks in for the api
+  //    that is why Google is commented out.
   addStockFromSymbol("AAPL");
-  //  addStockFromSymbol("GOOG");
+  addStockFromSymbol("GOOG");
   //  addStockFromSymbol("TSLA");
 
   // add everything to the gird layout

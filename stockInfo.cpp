@@ -81,14 +81,15 @@ void StockInfo::load()
   m_volume = QString::number(sett3["volume"].toDouble());
 
   QString openClosePrev = httpGet(("v2/aggs/ticker/" + m_symbol + "/prev").toUtf8().constData(), status);
-  cout << openClosePrev.toUtf8().constData() << endl;
 
   QJsonDocument d3 = QJsonDocument::fromJson(openClosePrev.toUtf8().constData());
   QJsonObject sett4 = d3.object();
+  QJsonValue value = sett4.value(QString("results"));
+
+  QJsonObject item = value[0].toObject();
 
   // I am taking the closing values, since the last trade and snapshot seem to be not authorized
-  QJsonObject results = sett4["results"].toObject();
-  m_diff = QString::number(results["c"].toDouble() - sett3["close"].toDouble());
+  m_diff = QString::number(item["c"].toDouble() - sett3["close"].toDouble());
 }
 
 QString StockInfo::logoFilename()

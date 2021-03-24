@@ -25,7 +25,7 @@ private:
   QPushButton* m_deleteButton;
   QNetworkAccessManager* m_networkManager;
   map<QString, StockInfo> m_stockDetails;
-  
+
 public:
   TickerWindow(int width, int height);
   ~TickerWindow();

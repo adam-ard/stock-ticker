@@ -20,15 +20,15 @@ StockInfo TickerWindow::getStockInfo(QString sym)
 {
   if(m_stockDetails.find(sym) != m_stockDetails.end())
 	return m_stockDetails[sym];
-  
+
   StockInfo info(sym, m_networkManager);
   info.load();
-  
+
   m_stockDetails[sym] = info;
   return info;
 }
 
-TickerWindow::TickerWindow(int width, int height) 
+TickerWindow::TickerWindow(int width, int height)
 {
   m_symLineEdit= new QLineEdit;
   m_detailsLabel = new QLabel;
@@ -44,7 +44,7 @@ TickerWindow::TickerWindow(int width, int height)
   resize(width, height);
   show();
 }
-  
+
 TickerWindow::~TickerWindow()
 {
   if(m_logoLabel)
@@ -92,10 +92,10 @@ void TickerWindow::doLayout()
   m_gridLayout->addWidget(m_logoLabel, 4, 0, 1, 2);
   m_gridLayout->addWidget(m_detailsLabel, 4, 2);
 
-  
+
 
   m_detailsLabel->setWordWrap(true);
-  
+
   // connect the signals and slots
   QObject::connect(m_addButton, &QPushButton::clicked, this, &TickerWindow::addStock);
   QObject::connect(m_deleteButton, &QPushButton::clicked, this, &TickerWindow::deleteStock);
@@ -133,7 +133,7 @@ void TickerWindow::updateDetails()
 	  setDetails("");
 	  return;
 	}
-  
+
   QTableWidgetItem* currItem = m_stockTableWidget->item(curr, SYMBOL_COLUMN);
   setDetails(currItem->text());
 }
@@ -170,5 +170,3 @@ void TickerWindow::addStock()
   addStockFromSymbol(m_symLineEdit->text());
   m_stockTableWidget->sortItems(1);
 }
-
-

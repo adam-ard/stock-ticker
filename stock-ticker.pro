@@ -24,5 +24,4 @@ SOURCES += main.cpp \
            stockInfo.cpp
 
 HEADERS += tickerWindow.h \
-           stockInfo.h               
-
+           stockInfo.h

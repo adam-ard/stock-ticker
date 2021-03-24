@@ -68,7 +68,7 @@ void StockInfo::load()
   QString logoUrl = sett2["logo"].toString();
 
   downloadFilePolygon(logoUrl.toUtf8().constData());
-  
+
   // Previous day
   QString openClosePrev = httpGetPolygon(("v2/aggs/ticker/" +
 										  m_symbol +

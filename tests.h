@@ -7,6 +7,7 @@ class TestStockInfo: public QObject
 {
   Q_OBJECT
 private slots:
+  void testParse();
   void testParseDetailsEmpty();
   void testParsePrevDayEmpty();
   void testLogoFilename();

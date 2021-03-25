@@ -122,4 +122,10 @@ void TestStockInfo::testParsePrevDayEmpty()
   QVERIFY(info.diff() == "");
 }
 
+void TestStockInfo::testShellCmd()
+{
+  string res = StockInfo::shellCmd("echo this stuff");
+  QVERIFY(res == "this stuff\n");
+}
+
 QTEST_MAIN(TestStockInfo)

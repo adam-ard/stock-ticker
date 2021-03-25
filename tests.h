@@ -11,6 +11,7 @@ private slots:
   void testParseDetailsEmpty();
   void testParsePrevDayEmpty();
   void testLogoFilename();
+  void testShellCmd();
   
 };
 

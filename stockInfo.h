@@ -27,7 +27,6 @@ private:
   string httpGetPolygon(const string path);
   string downloadFilePolygon(const string url);
   string httpGet(const string path);
-  string shellCmd(const string cmd);
 
 public:
   StockInfo();
@@ -42,10 +41,12 @@ public:
   QString diff();
 
   // I made these public so I could test them
-  //   but I am sure there is a better way to
-  //   do this.
+  //   but I am sure there is a way to test them
+  //   and keep them private. If I had more time,
+  //   I would investigate that.
   void parseDetails(string json);
   void parsePrevDay(string json);
+  static string shellCmd(const string cmd);
 };
 
 #endif //STOCK_INFO_H

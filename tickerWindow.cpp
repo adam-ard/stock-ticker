@@ -82,6 +82,7 @@ void TickerWindow::doLayout()
   addStockFromSymbol("GOOG");
   //  addStockFromSymbol("TSLA");
 
+
   // add everything to the gird layout
   m_gridLayout->addWidget(m_addButton, 0, 0);
   m_gridLayout->addWidget(m_symLineEdit, 0, 1, 1, 1);
@@ -90,8 +91,6 @@ void TickerWindow::doLayout()
   m_gridLayout->addWidget(m_logoLabel, 4, 0, 1, 2);
   m_gridLayout->addWidget(m_detailsLabel, 4, 2);
 
-
-
   m_detailsLabel->setWordWrap(true);
 
   // connect the signals and slots
@@ -99,21 +98,21 @@ void TickerWindow::doLayout()
   QObject::connect(m_deleteButton, &QPushButton::clicked, this, &TickerWindow::deleteStock);
   QObject::connect(m_stockTableWidget, &QTableWidget::itemSelectionChanged, this, &TickerWindow::updateDetails);
 
-  // set the selection to the first row
-  m_stockTableWidget->setCurrentCell(0,0);
-
   // set the widget layout
   setLayout(m_gridLayout);
+
+  // set the selection to the first row
+  m_stockTableWidget->setCurrentCell(0,0);
 }
 
 void TickerWindow::setDetails(QString symbol)
 {
   if(symbol == "")
-	{
-	  m_logoLabel->clear();
-	  m_detailsLabel->setText("Nothing is selected");
-	  return;
-	}
+  {
+	m_logoLabel->clear();
+	m_detailsLabel->setText("Nothing is selected");
+	return;
+  }
 
   StockInfo info = m_stockDetails[symbol];
   QPixmap pic(info.logoFilename());
@@ -127,10 +126,10 @@ void TickerWindow::updateDetails()
 
   // if nothing is selected, then make a blank selection
   if(curr == -1)
-	{
-	  setDetails("");
-	  return;
-	}
+  {
+	setDetails("");
+	return;
+  }
 
   QTableWidgetItem* currItem = m_stockTableWidget->item(curr, SYMBOL_COLUMN);
   setDetails(currItem->text());

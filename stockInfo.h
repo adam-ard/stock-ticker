@@ -21,10 +21,10 @@ private:
   QString m_volume;
 
   // helpers
-  QString httpGetPolygon(const string path);
-  QString downloadFilePolygon(const string url);
-  QString httpGet(const string path);
-  QString shellCmd(const string cmd);
+  string httpGetPolygon(const string path);
+  string downloadFilePolygon(const string url);
+  string httpGet(const string path);
+  string shellCmd(const string cmd);
 
 public:
   StockInfo();

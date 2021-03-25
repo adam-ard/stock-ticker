@@ -8,25 +8,25 @@
 const string API_URL = "https://api.polygon.io/";
 const string API_KEY = std::getenv("POLYGON_API_KEY");
 
-QString StockInfo::httpGetPolygon(const string path)
+string StockInfo::httpGetPolygon(const string path)
 {
   string polygonPath = API_URL + path + "?apiKey=" + API_KEY;
   return httpGet(polygonPath);
 }
 
-QString StockInfo::downloadFilePolygon(const string url)
+string StockInfo::downloadFilePolygon(const string url)
 {
   string cmd = "curl " + url + "?apiKey=" + API_KEY + " --output " +
 	m_symbol.toUtf8().constData() + ".png";
   return shellCmd(cmd);
 }
 
-QString StockInfo::httpGet(const string path)
+string StockInfo::httpGet(const string path)
 {
   return shellCmd("curl " + path);
 }
 
-QString StockInfo::shellCmd(const string cmd)
+string StockInfo::shellCmd(const string cmd)
 {
   FILE* pPipe = ::popen(cmd.c_str(), "r");
 
@@ -40,7 +40,7 @@ QString StockInfo::shellCmd(const string cmd)
   }
 
   ::pclose(pPipe);
-  return QString::fromStdString(result);
+  return result;
 }
 
 StockInfo::StockInfo(QString sym) : m_symbol(sym)
@@ -55,11 +55,11 @@ StockInfo::StockInfo()
 void StockInfo::load()
 {
   // Details
-  QString symbolDetails = httpGetPolygon(("v1/meta/symbols/" +
+  string symbolDetails = httpGetPolygon(("v1/meta/symbols/" +
 										  m_symbol +
 										  "/company").toUtf8().constData());
 
-  QJsonDocument document = QJsonDocument::fromJson(symbolDetails.toUtf8().constData());
+  QJsonDocument document = QJsonDocument::fromJson(symbolDetails.c_str());
   QJsonObject root = document.object();
 
   m_name = root["name"].toString();
@@ -69,11 +69,11 @@ void StockInfo::load()
   downloadFilePolygon(logoUrl.toUtf8().constData());
 
   // Previous day
-  QString openClosePrev = httpGetPolygon(("v2/aggs/ticker/" +
+  string openClosePrev = httpGetPolygon(("v2/aggs/ticker/" +
 										  m_symbol +
 										  "/prev").toUtf8().constData());
 
-  QJsonDocument document2 = QJsonDocument::fromJson(openClosePrev.toUtf8().constData());
+  QJsonDocument document2 = QJsonDocument::fromJson(openClosePrev.c_str());
   QJsonObject root2 = document2.object();
   QJsonValue value = root2.value(QString("results"));
 
@@ -83,7 +83,7 @@ void StockInfo::load()
   // I just stuck in a placeholder.
   double yesterdayPrice = item["c"].toDouble();
   double todayPrice = yesterdayPrice * 0.98f;
-  
+
   m_price = QString::number(todayPrice);
   m_diff = QString::number(todayPrice - yesterdayPrice);
 

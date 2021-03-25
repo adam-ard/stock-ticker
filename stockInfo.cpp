@@ -6,17 +6,16 @@
 #include "stockInfo.h"
 
 const string API_URL = "https://api.polygon.io/";
-const string API_KEY = std::getenv("POLYGON_API_KEY");
 
 string StockInfo::httpGetPolygon(const string path)
 {
-  string polygonPath = API_URL + path + "?apiKey=" + API_KEY;
+  string polygonPath = API_URL + path + "?apiKey=" + m_apiKey;
   return httpGet(polygonPath);
 }
 
 string StockInfo::downloadFilePolygon(const string url)
 {
-  string cmd = "curl " + url + "?apiKey=" + API_KEY + " --output " +
+  string cmd = "curl " + url + "?apiKey=" + m_apiKey + " --output " +
 	m_symbol.toUtf8().constData() + ".png";
   return shellCmd(cmd);
 }
@@ -45,6 +44,7 @@ string StockInfo::shellCmd(const string cmd)
 
 StockInfo::StockInfo(QString sym) : m_symbol(sym)
 {
+  m_apiKey = std::getenv("POLYGON_API_KEY");
   m_logoFilename = m_symbol + ".png";
 }
 

@@ -43,5 +43,5 @@ make
 ## To Run Tests
 
 ```bash
-POLYGON_API_KEY=xxxxxxxxxxxxxxxx ./tests
+./tests
 ```

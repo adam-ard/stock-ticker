@@ -20,6 +20,8 @@ private:
   QString m_close;
   QString m_volume;
 
+  string m_apiKey;
+
   // helpers
   string httpGetPolygon(const string path);
   string downloadFilePolygon(const string url);

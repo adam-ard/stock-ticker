@@ -9,8 +9,8 @@ void TestStockInfo::toUpper()
 
 void TestStockInfo::anotherTest()
 {
-  //  StockInfo info;
-  //  QVERIFY(true);
+  StockInfo info;
+  QVERIFY(true);
 }
 
 QTEST_MAIN(TestStockInfo)

@@ -1,16 +1,35 @@
 #include "tests.h"
 #include "stockInfo.h"
 
-void TestStockInfo::toUpper()
+#include <iostream>
+
+using namespace std;
+
+void TestStockInfo::testLogoFilename()
 {
-  QString str = "Hello";
-  QVERIFY(str.toUpper() == "HELLO");
+  StockInfo info("TEST");
+  QVERIFY(info.symbol() == "TEST");
+  QVERIFY(info.logoFilename() == "TEST.png");
 }
 
-void TestStockInfo::anotherTest()
+void TestStockInfo::testParseDetailsEmpty()
 {
-  StockInfo info;
-  QVERIFY(true);
+  StockInfo info("TEST");
+  info.parseDetails("{}");
+
+  QVERIFY(info.stockDesc() ==
+		  "Title: TEST\nSubtitle: \nDesc: \nOpen: \nHigh: \nLow: \nClose: \nVolume: ");
+}
+
+void TestStockInfo::testParsePrevDayEmpty()
+{
+  StockInfo info("TEST");
+  info.parseDetails("{}");
+
+  QVERIFY(info.symbol() == "TEST");
+  QVERIFY(info.name() == "");
+  QVERIFY(info.price() == "");
+  QVERIFY(info.diff() == "");
 }
 
 QTEST_MAIN(TestStockInfo)

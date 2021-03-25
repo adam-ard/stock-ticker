@@ -19,6 +19,7 @@ private:
   QString m_low;
   QString m_close;
   QString m_volume;
+  QString m_logoUrl;
 
   string m_apiKey;
 
@@ -39,6 +40,12 @@ public:
   QString name();
   QString price();
   QString diff();
+
+  // I made these public so I could test them
+  //   but I am sure there is a better way to
+  //   do this.
+  void parseDetails(string json);
+  void parsePrevDay(string json);
 };
 
 #endif //STOCK_INFO_H

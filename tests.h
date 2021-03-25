@@ -7,8 +7,10 @@ class TestStockInfo: public QObject
 {
   Q_OBJECT
 private slots:
-  void toUpper();
-  void anotherTest();
+  void testParseDetailsEmpty();
+  void testParsePrevDayEmpty();
+  void testLogoFilename();
+  
 };
 
 #endif //TESTS_H

@@ -44,7 +44,10 @@ string StockInfo::shellCmd(const string cmd)
 
 StockInfo::StockInfo(QString sym) : m_symbol(sym)
 {
-  m_apiKey = std::getenv("POLYGON_API_KEY");
+  const char* key = std::getenv("POLYGON_API_KEY");
+  if(key) {
+	m_apiKey = key;
+  }
   m_logoFilename = m_symbol + ".png";
 }
 
@@ -52,30 +55,21 @@ StockInfo::StockInfo()
 {
 }
 
-void StockInfo::load()
+void StockInfo::parseDetails(string json)
 {
-  // Details
-  string symbolDetails = httpGetPolygon(("v1/meta/symbols/" +
-										  m_symbol +
-										  "/company").toUtf8().constData());
-
-  QJsonDocument document = QJsonDocument::fromJson(symbolDetails.c_str());
+  QJsonDocument document = QJsonDocument::fromJson(json.c_str());
   QJsonObject root = document.object();
 
   m_name = root["name"].toString();
   m_desc = root["description"].toString();
-  QString logoUrl = root["logo"].toString();
+  m_logoUrl = root["logo"].toString();
+}
 
-  downloadFilePolygon(logoUrl.toUtf8().constData());
-
-  // Previous day
-  string openClosePrev = httpGetPolygon(("v2/aggs/ticker/" +
-										  m_symbol +
-										  "/prev").toUtf8().constData());
-
-  QJsonDocument document2 = QJsonDocument::fromJson(openClosePrev.c_str());
-  QJsonObject root2 = document2.object();
-  QJsonValue value = root2.value(QString("results"));
+void StockInfo::parsePrevDay(string json)
+{
+  QJsonDocument document = QJsonDocument::fromJson(json.c_str());
+  QJsonObject root = document.object();
+  QJsonValue value = root.value(QString("results"));
 
   QJsonObject item = value[0].toObject();
 
@@ -92,6 +86,24 @@ void StockInfo::load()
   m_low = QString::number(item["l"].toDouble());
   m_close = QString::number(item["c"].toDouble());
   m_volume = QString::number(item["v"].toDouble());
+}
+
+void StockInfo::load()
+{
+  // Details API call
+  string symbolDetails = httpGetPolygon(("v1/meta/symbols/" +
+										  m_symbol +
+										  "/company").toUtf8().constData());
+
+  parseDetails(symbolDetails);
+  downloadFilePolygon(m_logoUrl.toUtf8().constData());
+
+  // Previous day API call
+  string openClosePrev = httpGetPolygon(("v2/aggs/ticker/" +
+										  m_symbol +
+										  "/prev").toUtf8().constData());
+  parsePrevDay(openClosePrev);
+  
 }
 
 QString StockInfo::logoFilename()

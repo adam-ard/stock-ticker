@@ -80,7 +80,7 @@ void TickerWindow::doLayout()
   //    that is why Tesla is commented out.
   addStockFromSymbol("AAPL");
   addStockFromSymbol("GOOG");
-  //  addStockFromSymbol("TSLA");
+  addStockFromSymbol("TSLA");
 
 
   // add everything to the gird layout

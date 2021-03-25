@@ -1,17 +1,16 @@
 #include <QString>
-#include <QNetworkAccessManager>
 #include <QJsonDocument>
 #include <QJsonObject>
 
 #include <iostream>
 #include "stockInfo.h"
 
+const string API_URL = "https://api.polygon.io/";
 const string API_KEY = std::getenv("POLYGON_API_KEY");
 
 QString StockInfo::httpGetPolygon(const string path)
 {
-  string polygonPath = "https://api.polygon.io/" +
-	path + "?apiKey=" + API_KEY;
+  string polygonPath = API_URL + path + "?apiKey=" + API_KEY;
   return httpGet(polygonPath);
 }
 
@@ -29,22 +28,23 @@ QString StockInfo::httpGet(const string path)
 
 QString StockInfo::shellCmd(const string cmd)
 {
-  auto pPipe = ::popen(cmd.c_str(), "r");
-  array<char, 256> buffer;
+  FILE* pPipe = ::popen(cmd.c_str(), "r");
+
+  int bufferSize = 1000;
+  char buffer[bufferSize];
   string result;
   while(not feof(pPipe))
   {
-	  auto bytes = fread(buffer.data(), 1, buffer.size(), pPipe);
-	  result.append(buffer.data(), bytes);
+	  size_t bytes = fread(buffer, 1, bufferSize, pPipe);
+	  result.append(buffer, bytes);
   }
 
   ::pclose(pPipe);
   return QString::fromStdString(result);
 }
 
-StockInfo::StockInfo(QString sym, QNetworkAccessManager* networkManager) : m_symbol(sym)
+StockInfo::StockInfo(QString sym) : m_symbol(sym)
 {
-  m_networkManager = networkManager;
   m_logoFilename = m_symbol + ".png";
 }
 
@@ -80,9 +80,12 @@ void StockInfo::load()
   QJsonObject item = value[0].toObject();
 
   // I can't seem to get the price from the api, I think only paid accounts can get that data
-  // I just stuck in 5.0 as a place holder
-  m_price = QString::number(5.0f);
-  m_diff = QString::number(5.0f - item["c"].toDouble());
+  // I just stuck in a placeholder.
+  double yesterdayPrice = item["c"].toDouble();
+  double todayPrice = yesterdayPrice * 0.98f;
+  
+  m_price = QString::number(todayPrice);
+  m_diff = QString::number(todayPrice - yesterdayPrice);
 
   m_open = QString::number(item["o"].toDouble());
   m_high = QString::number(item["h"].toDouble());

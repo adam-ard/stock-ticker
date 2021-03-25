@@ -4,7 +4,6 @@
 #include <QLabel>
 #include <QTableWidget>
 #include <QHeaderView>
-#include <QNetworkAccessManager>
 #include <iostream>
 
 #include "tickerWindow.h"
@@ -21,7 +20,7 @@ StockInfo TickerWindow::getStockInfo(QString sym)
   if(m_stockDetails.find(sym) != m_stockDetails.end())
 	return m_stockDetails[sym];
 
-  StockInfo info(sym, m_networkManager);
+  StockInfo info(sym);
   info.load();
 
   m_stockDetails[sym] = info;
@@ -37,7 +36,6 @@ TickerWindow::TickerWindow(int width, int height)
   m_gridLayout = new QGridLayout;
   m_addButton = new QPushButton("Add");
   m_deleteButton = new QPushButton("Delete");
-  m_networkManager = new QNetworkAccessManager(this);
 
   doLayout();
 

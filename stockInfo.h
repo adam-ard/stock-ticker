@@ -2,7 +2,6 @@
 #define STOCK_INFO_H
 
 class QString;
-class QNetworkAccessManager;
 
 using namespace std;
 
@@ -20,7 +19,6 @@ private:
   QString m_low;
   QString m_close;
   QString m_volume;
-  QNetworkAccessManager* m_networkManager;
 
   // helpers
   QString httpGetPolygon(const string path);
@@ -30,7 +28,7 @@ private:
 
 public:
   StockInfo();
-  StockInfo(QString sym, QNetworkAccessManager* networkManager);
+  StockInfo(QString sym);
   void load();
   QString stockDesc();
   QString logoFilename();

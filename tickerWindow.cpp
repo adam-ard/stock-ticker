@@ -76,9 +76,11 @@ void TickerWindow::doLayout()
   m_stockTableWidget->setShowGrid(false);
   m_stockTableWidget->sortItems(1);
 
+  // I commented out Tesla, because the api seems to trottle the calls
+  //    if you make too many in a minute.
   addStockFromSymbol("AAPL");
   addStockFromSymbol("GOOG");
-  addStockFromSymbol("TSLA");
+  //addStockFromSymbol("TSLA");
 
   // add everything to the gird layout
   m_gridLayout->addWidget(m_addButton, 0, 0);

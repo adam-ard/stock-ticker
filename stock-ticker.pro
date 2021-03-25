@@ -3,9 +3,8 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = stock-ticker
 INCLUDEPATH += .
-QT += widgets
+QT += widgets testlib
 
 # The following define makes your compiler warn you if you use any
 # feature of Qt which has been marked as deprecated (the exact warnings
@@ -19,9 +18,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 # Input
-SOURCES += main.cpp \
-           tickerWindow.cpp \
+SOURCES += tickerWindow.cpp \
            stockInfo.cpp
-
+           
 HEADERS += tickerWindow.h \
            stockInfo.h
+
+test {
+TARGET = tests
+HEADERS += tests.h
+SOURCES += tests.cpp
+}
+else {
+TARGET = stock-ticker
+SOURCES += main.cpp
+}
+     

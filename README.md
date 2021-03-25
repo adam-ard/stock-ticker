@@ -13,7 +13,7 @@ Install qt5
 sudo apt-get install qt5-default
 ```
 
-## To build
+## To build the application
 
 To build this application run the following:
 
@@ -29,4 +29,19 @@ stock_ticker directly
 
 ```bash
 POLYGON_API_KEY=xxxxxxxxxxxxxxxx ./stock-ticker
+```
+
+## To Build Tests
+
+To build the test application run the following:
+
+```bash
+qmake "CONFIG += test"
+make
+```
+
+## To Run Tests
+
+```bash
+POLYGON_API_KEY=xxxxxxxxxxxxxxxx ./tests
 ```

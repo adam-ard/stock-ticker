@@ -76,12 +76,9 @@ void TickerWindow::doLayout()
   m_stockTableWidget->setShowGrid(false);
   m_stockTableWidget->sortItems(1);
 
-  // I can only seed two values before the rate limiting kicks in for the api
-  //    that is why Tesla is commented out.
   addStockFromSymbol("AAPL");
   addStockFromSymbol("GOOG");
   addStockFromSymbol("TSLA");
-
 
   // add everything to the gird layout
   m_gridLayout->addWidget(m_addButton, 0, 0);
